@@ -1,95 +1,93 @@
 import os
-import sys
-import logging
-import asyncio
+
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 
-# 로깅 설정
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    handlers=[logging.StreamHandler(sys.stdout)]
-)
-logger = logging.getLogger("discord_bot")
 
-# 프로젝트 루트 경로를 sys.path에 추가 (어디서 실행하든 정상 동작하도록 보장)
-current_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.dirname(current_dir) if os.path.basename(current_dir) == "bot" else current_dir
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
+# ============================================================
+# Environment
+# ============================================================
 
-# .env 파일 로드
-load_dotenv(os.path.join(project_root, ".env"))
 load_dotenv()
-TOKEN = os.getenv("DISCORD_BOT_TOKEN")
-TEST_GUILD_ID = os.getenv("TEST_GUILD_ID")
 
-class MyBot(commands.Bot):
+TOKEN = os.getenv("DISCORD_TOKEN")
+
+
+# ============================================================
+# Bot
+# ============================================================
+
+class MusicBot(commands.Bot):
+
     def __init__(self):
-        # 기본 인텐트 설정
+
         intents = discord.Intents.default()
-        intents.message_content = True  # 접두사 명령어 및 메시지 내용 수신용
+
+        # Prefix Command 및 Message Content 사용
+        intents.message_content = True
 
         super().__init__(
-            command_prefix="!",
-            intents=intents,
-            help_command=None
+            command_prefix="/",
+            intents=intents
         )
+
 
     async def setup_hook(self):
-        """봇 시작 전 Cog 로드 및 슬래시 커맨드 동기화"""
-        cogs_dir = os.path.join(project_root, "bot", "cogs")
-        if os.path.exists(cogs_dir):
-            for filename in os.listdir(cogs_dir):
-                if filename.endswith(".py") and not filename.startswith("_"):
-                    extension_name = f"bot.cogs.{filename[:-3]}"
-                    try:
-                        await self.load_extension(extension_name)
-                        logger.info(f"Loaded extension: {extension_name}")
-                    except Exception as e:
-                        logger.error(f"Failed to load extension {extension_name}: {e}", exc_info=True)
-
-        # 슬래시 커맨드(App Command) 동기화
-        if TEST_GUILD_ID:
-            try:
-                guild = discord.Object(id=int(TEST_GUILD_ID))
-                self.tree.copy_global_to(guild=guild)
-                synced = await self.tree.sync(guild=guild)
-                logger.info(f"Synced {len(synced)} command(s) to test guild: {TEST_GUILD_ID}")
-            except Exception as e:
-                logger.error(f"Failed to sync commands to test guild: {e}", exc_info=True)
-        else:
-            try:
-                synced = await self.tree.sync()
-                logger.info(f"Synced {len(synced)} command(s) globally.")
-            except Exception as e:
-                logger.error(f"Failed to sync commands globally: {e}", exc_info=True)
-
-    async def on_ready(self):
-        """봇 로그인 완료 시 호출"""
-        logger.info(f"Logged in as {self.user} (ID: {self.user.id})")
-        logger.info(f"Connected to {len(self.guilds)} guild(s).")
-        
-        # 봇 상태 메시지 설정
-        activity = discord.Activity(
-            type=discord.ActivityType.watching,
-            name="/ping | 작동 중"
+        await self.load_extension(
+            "bot.cogs.music"
         )
-        await self.change_presence(status=discord.Status.online, activity=activity)
 
-async def main():
-    if not TOKEN or TOKEN == "your_bot_token_here":
-        logger.error("DISCORD_BOT_TOKEN이 설정되지 않았습니다. .env 파일에 올바른 봇 토큰을 입력해주세요.")
-        return
+        await self.load_extension(
+            "bot.cogs.custom_match"
+        )
 
-    bot = MyBot()
-    async with bot:
-        await bot.start(TOKEN)
+        synced = await self.tree.sync()
+        print(
+            f"글로벌 Slash Command 동기화 완료 ({len(synced)}개): {[c.name for c in synced]}"
+        )
 
-if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except KeyboardInterrupt:
-        logger.info("Bot stopped by user.")
+
+# ============================================================
+# Bot
+# ============================================================
+
+bot = MusicBot()
+
+
+# ============================================================
+# Event
+# ============================================================
+
+@bot.event
+async def on_ready():
+    print(
+        f"로그인 완료: {bot.user} (ID: {bot.user.id})"
+    )
+
+    # 봇이 참여 중인 모든 서버에 즉시 동기화 (글로벌 롤아웃 지연 방지)
+    for guild in bot.guilds:
+        try:
+            bot.tree.copy_global_to(guild=guild)
+            guild_synced = await bot.tree.sync(guild=guild)
+            print(
+                f"[{guild.name}] 서버 슬래시 커맨드 즉시 동기화 완료 ({len(guild_synced)}개)"
+            )
+        except Exception as e:
+            print(
+                f"[{guild.name}] 길드 동기화 오류: {e}"
+            )
+
+
+# ============================================================
+# Run
+# ============================================================
+
+if not TOKEN:
+
+    raise RuntimeError(
+        "DISCORD_TOKEN이 설정되지 않았습니다."
+    )
+
+
+bot.run(TOKEN)

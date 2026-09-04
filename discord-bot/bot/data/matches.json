@@ -1,0 +1,108 @@
+{
+    "999999999": [],
+    "888888888": [],
+    "1544976467543199795": [
+        {
+            "game_name": "박치기 공룡",
+            "tag_line": "꼬라박",
+            "full_name": "박치기 공룡 #꼬라박",
+            "tier": "DIAMOND",
+            "rank": "II",
+            "lp": 75,
+            "tier_short": "D2",
+            "mmr_score": 2737
+        },
+        {
+            "game_name": "열무비빔면",
+            "tag_line": "따뜻한",
+            "full_name": "열무비빔면 #따뜻한",
+            "tier": "EMERALD",
+            "rank": "III",
+            "lp": 18,
+            "tier_short": "E3",
+            "mmr_score": 2209
+        },
+        {
+            "game_name": "차 누",
+            "tag_line": "anu",
+            "full_name": "차 누 #anu",
+            "tier": "UNRANKED",
+            "rank": null,
+            "lp": 0,
+            "tier_short": "U",
+            "mmr_score": 1100
+        },
+        {
+            "game_name": "백도어 박사",
+            "tag_line": "KR1",
+            "full_name": "백도어 박사 #KR1",
+            "tier": "EMERALD",
+            "rank": "I",
+            "lp": 22,
+            "tier_short": "E1",
+            "mmr_score": 2411
+        },
+        {
+            "game_name": "착한마음어린이",
+            "tag_line": "KR1",
+            "full_name": "착한마음어린이 #KR1",
+            "tier": "DIAMOND",
+            "rank": "II",
+            "lp": 75,
+            "tier_short": "D2",
+            "mmr_score": 2737
+        },
+        {
+            "game_name": "파란게좋겠군",
+            "tag_line": "KR1",
+            "full_name": "파란게좋겠군 #KR1",
+            "tier": "MASTER",
+            "rank": "I",
+            "lp": 13,
+            "tier_short": "M",
+            "mmr_score": 2913
+        },
+        {
+            "game_name": "당신너무한심해",
+            "tag_line": "530",
+            "full_name": "당신너무한심해 #530",
+            "tier": "PLATINUM",
+            "rank": "I",
+            "lp": 44,
+            "tier_short": "P1",
+            "mmr_score": 2022
+        },
+        {
+            "game_name": "KANAVI",
+            "tag_line": "HLE",
+            "full_name": "KANAVI #HLE",
+            "tier": "DIAMOND",
+            "rank": "IV",
+            "lp": 67,
+            "tier_short": "D4",
+            "mmr_score": 2533
+        },
+        {
+            "game_name": "서 시",
+            "tag_line": "1115",
+            "full_name": "서 시 #1115",
+            "tier": "MASTER",
+            "rank": "I",
+            "lp": 25,
+            "tier_short": "M",
+            "mmr_score": 2925
+        },
+        {
+            "game_name": "운동 게임 사업",
+            "tag_line": "삼위일체",
+            "full_name": "운동 게임 사업 #삼위일체",
+            "tier": "DIAMOND",
+            "rank": "I",
+            "lp": 10,
+            "tier_short": "D1",
+            "mmr_score": 2805
+        }
+    ],
+    "111111111": [],
+    "777777777": []
+}
