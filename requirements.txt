@@ -1,0 +1,6 @@
+# discord.py의 voice extra가 PyNaCl과 davey를 함께 끌어옵니다.
+# davey = discord.py 2.7의 새 음성 백엔드. 이게 없으면 음성 연결이 아예 안 됩니다.
+# PyNaCl은 discord.py가 <1.6 으로 제한하므로 직접 상위 버전을 지정하면 안 됩니다.
+discord.py[voice]>=2.7.0
+python-dotenv>=1.0.0
+yt-dlp>=2026.8.19
